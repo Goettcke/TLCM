@@ -1,0 +1,104 @@
+\section{Related Work}
+\subsection*{Dataset complexity measures}
+In Barella et al. \cite{DBLP:journals/isci/BarellaGSLC21} \emph{Assessing the data complexity of imbalanced datasets} they adapt a vast selection of existing data complexity measures, to account for class imbalance. They compare them, to see which measures are most suited.
+Their experimental framework is tremendous, and uses many different classifiers with large parameter spaces to search through. They report the quality measure, as well as the gmean of the classifiers performance. To asses the performance, they also report the dataset complexity measures Pearson correlation to the gmean. They state that they use grid search for parameter tuning, but this is ambiguous since they can pick an optimum parameter for each dataset, or for each of their random samples, or even down to each individual cross validation fold. For each of their 102 datasets they run 5 fold cross validation with 30 repetitions (which we assume is 30 randomly resampled datasets, they run the algorithm over.) After concluding what is their 4 best contenders for measures, they dive into showing how different data level class imbalance handling algorithms such as SMOTE, RUS and ADASYN affect the measure, and also how they affect the performance of the classifiers in the line up. 
+%TODO here we could dive into the good contenders from their paper, and show how their are actually defined mathematically.  
+\subsection*{Imbalance Degree}
+Ortigosa-Hernández et al. create one of the first multiclass class imbalance complexity measures, dubbed the Imbalance Degree to take on the Imbalance Ratio (IR) measure. They also introduce useful definitions for describing the class imbalance problem in a dataset such as multi-majority datasets Equation \ref{eq:multi-majority} and multi-minority datasets in Equation \ref{eq:multi-minority} 
+\begin{equation}
+    \label{eq:multi-majority}
+\sum_{i=1}^{|C|}\mathbbm{1} \left (n_{i}\geq\frac{1}{|C|} \right )\geq\frac{|C|}{2}
+\end{equation}
+
+\begin{equation}
+    \label{eq:multi-minority}
+\sum_{i=1}^{|C|}\mathbbm{1} \left (n_{i} < \frac{1}{|C|} \right )\geq\frac{|C|}{2}
+\end{equation}
+where $|C|$ is the number of classes, and $n_i$ is the number of points within class $i$. $\mathbbm{1}$ is the indicator function, which yields 1, if the statement inside the parentheses is true. Their primary idea is to utilize the information from multiple distributions. They define the distance $d_\Delta(\zeta,e)$, which is the distance from the class distribution in the dataset, for instance $\left (\frac{1}{4},\frac{1}{2},\frac{1}{4} \right )$, a slightly imbalanced ternary classification problem, and $e$ which is the uniform distribution. They then define their measure for imbalance degree as shown in Equation \ref{eq:imbalance-degree}.
+\begin{equation}
+    \label{eq:imbalance-degree}
+    \frac{d_\Delta(\zeta,e)}{d_\Delta(l_m,e)} + (m-1)
+\end{equation}
+Here $l_m$ is the distribution containing exactly $m$ minority classes, which is furthest away from $e$, and $(m-1)$ is a normalization part. They cover the possibility for using many different distance measures such as Euclidean, Manhattan, Kullback Leibler Divergence and more. 
+
+\subsection*{LRID}
+In \emph{LRID: A new metric of multi-class imbalance degree based on
+likelihood-ratio test} \cite{DBLP:journals/prl/ZhuWMWX18} Rui et al. attacks the Imbalance Degree head on, by pointing out some flaws with the measure. One of the flaws found is that because multi-minority classes are weighted as more problematic than multi-majority problems, there can occur some bizarre outputs of the algorithm. In their own example, they show how a basically balanced distribution with two slight minority classes and 1 slight majority class, and a very imbalanced distribution with 1 miniscule minority class and 2 comparatively enormous majorities, have a slightly smaller imbalance degree than the first case. This is of course seems incorrect.
+The LRID measure builds upon the likelihood ratio test and is defined as shown in Equation \ref{eq:lrid} when the proportions of the distribution for each class $c$ is set to $\frac{n_c}{N}$
+\begin{equation}
+    \label{eq:lrid}
+    \text{LRID}=-2\sum_{c=1}^{C}n_{c}\ln\frac{b_c}{\hat{p}_c}=-2\sum_{c=1}^{C}n_{c}\ln\frac{N}{Cn_c}
+\end{equation} 
+To evaluate \emph{LRID} Rui et al. show the Spearman and the Pearson rank correlation for a support vector machine and a linear discriminant analysis setup, between the class imbalance complexity / extent measure, and the F1 measure.   
+
+\subsection*{Adjusted IR}
+In \emph{Adjusting the imbalance ratio by the dimensionality of imbalanced data} \cite{DBLP:journals/prl/ZhuGX20} Zhu et al. adapt the existing imbalance ratio, by making it sensitive to the number of discriminative features, by penalizing more discriminative feature, which makes the problem more complex. Their measure dubbed the adjusted imbalance ratio, and they claim it is the first class imbalance extent / complexity measure to use information about the dimensionality. They use the Pearson correlation coefficient to determine, if there's a correlation between a feature variable and the label. The adjusted imbalance ratio measure can be seen in Equation  \ref{eq:adjusted-ir} here $\lambda$ adjusts the strength of the penalty and $p^*$ is the number of discriminative resulting from the Pearson correlation test given a user defined significance threshold. 
+\begin{equation}
+    \label{eq:adjusted-ir}
+    \text{Adjusted IR} = \text{IR}-\lambda \log(p^*)
+\end{equation}
+
+
+\subsection*{Silhouette coefficient - Raj et al}
+In \emph{Towards effective classification of imbalanced data with convolutional neural networks} \cite{raj2016towards} they confront the problem, that learning in an imbalanced setting is affected by class separability, and cite \cite{DBLP:journals/apin/MurpheyGF04}. They modify the cost function for gradient descent using the imbalance ratio, and penalize misclassifying instances from minority classes as majority, proportional to the IR. They then compare this with using the imbalance ratio in combination with the silhouette coefficient. Their adapted imbalance ratio measure is $H_\text{adjusted}=IR(1+|S|)$ where S is the silhouette coefficient. They find that using the silhouette coefficient in combination with the imbalance ratio works better, than just using IR alone.
+
+\subsection*{Imbalance preprocessing and dataset complexity}
+In Luengo et al. \cite{luengo2011addressing} they study how a selection of 12 different dataset complexity measures is affected by dataset class imbalance preprocessing such as SMOTE \cite{DBLP:journals/jair/ChawlaBHK02}. They cover just two different classifiers - C4.5\cite{DBLP:books/mk/Quinlan93} and PART, and 3 different preprocessing techniques. SMOTE, SMOTE-ENN and EUSCHC. They conclude that \emph{IR} is insufficient to predict if one of the two classifiers is going to perform well or not.
+
+\subsection*{Notes}
+The scores are given to show how important it is to include this information in the paper. 
+\subsubsection*{Barella et al. 5/5}
+Barella's experimental framework is shown in table 18 on page 14. They show their experimental framework as a diagram. They got their datasets from OpenML. In the actual paper they just show some statistics about them, and in the appendix they go into detail. 
+They cover their related methods in super high detail. \emph{DIT} is an abbreviation for Data Imbalance Treatment. 
+\subsubsection*{Ghosh et al. 1/5}
+Ghosh et al. 2021 explores the relation between the depth of neural networks, and their ability to handle the class imbalance problem. A super exiting paper, but \emph{Not sure this paper is relevant for this study, cause they don't really go into detail with how to measure class imbalance complexity in a multiclass setting}. 
+\subsubsection*{Ortigosa-Hernández 4/5} 
+They do not focus on how the data is distributed in space, which in combination with Raj et al.  
+\subsubsection*{Rui et al. 2018 (LRID)}
+They do not use any other information, than just the distributions.
+\subsubsection*{Rui et al. 2020 (AIR)} 
+They point to Ortigosa-Hernández in their literature review. They refer to the imbalance complexity as the imbalance extent, which is terminologically interesting. They refer to IR as a low resolution metric, and ID by Ortigosa-Hernández as a high resolution metric, because it includes information about all the classes. They also refer back to LRID \cite{DBLP:journals/prl/ZhuWMWX18} by the same author Rui Zhu.
+\subsubsection*{Van der walt \& Bernard 2006}
+The paper \emph{Measures for the characterisation of pattern-recognition data sets} studies several dataset complexity measures to identify and ultimately predict classifier performance \cite{van2007measures}. They construct a meta-classification scheme, which is used to predict how well a classifier is going to perform on a given dataset. They do not perse go into detail about class imbalance, but does use a measure named \emph{samples per group}, which does in some way measure a problem which can occur with class imbalance. $\epsilon$ balls are grown from starting points in the dataset, and points are added as long, as they are within the same class. If the $\epsilon$-ball reaches another class the sucessive adherence subset is grown as large as it can, and a new one is built. The mean size of these adherence subsets is then reported. They do not cover this, but it is clear, that in a binary setting, if we have a minority class engulfed by a majority class. These subsets will be tiny, at least for the minority class. The formula is given in Equation \ref{eq:samples-per-group}.
+\begin{equation}
+    \label{eq:samples-per-group}
+    \frac{1}{N_\text{retained}} \sum_{i=1}^{N_\text{retained}} S_i
+\end{equation}
+
+\subsubsection*{Dudjak \& Martinović 2021 2/5}
+\emph{An empirical study of data intrinsic characteristics that make learning from
+imbalanced data difficult} \cite{dudjak2021empirical} Makes an empirical study of the behavior of standard classification algorithms (decision trees, support vector machines, multilayer perceptron, Gaussian naive Bayes and kNN) on a large selection of imbalanced datasets. Their goal is to determine the severity of difficulty factors such as class overlap, noise, data rarity, small disjuncts and of course class imbalance. They give pointers to which classifiers and data modification strategy to use dependent on the most influential difficulty factor. They use class imbalance ratio, as a measure for the imbalance level. This paper points to \emph{Lopez et al.} when justifying the AUC measure for evaluation. \emph{Could be useful, to justify the choice of evaluation measure.}
+
+\subsubsection*{Lopez et al. 2013 2/5}
+\emph{An insight into classification with imbalanced data: Empirical results and current trends on using data intrinsic characteristics} \cite{lopez2013insight} Provides a good overview of the field of class imbalanced learning. They cover different strategies to handle the class imbalance problem, such as cost-sensitive learning, resampling, algorithm modification, and ensemble techniques. They also cover performance evaluation measures such as AUC, geometric mean, adjusted g-mean, F-measure, precision, index of balanced accuracy (IBA) and a measure called Dominance. They also cover noisy data, small disjuncts and overlapping. They only cover the imbalance ratio.
+
+\subsubsection*{Krawczyk \& Wozniak 2016 5/5}
+\emph{Analyzing the oversampling of different classes and types of examples in multi-class imbalanced datasets} \cite{Saez:2016} Notice that the class imbalance problem becomes much more significant, when we leave the binary setting, because the relationship between the classes is, as they say, no longer straight forward. They characterize different types of examples in a multi-class imbalance setting. The illustration is god awful, but the different types of minority instances is sensible. There are (1) safe examples, (2) borderline examples, (3) rare examples which are in the extremes of the minority distribution, and therefore most likely contribute to the number of small disjuncts, and finally (4) outliers. They compare the algorithms, and preprocessing methods using Wilcoxon's signed rank test, for different resampling strategies and NN,SVM and C4.5 classifiers.      
+
+\subsubsection*{Sleeman \& Krawczyk 2021 1/5}
+\emph{Multi-class imbalanced big data classification on Spark} \cite{Sleeman:2021} Points out that most of the existing algorithms focus on binary imbalanced problems, and similarly that the multi-class setting is much more complex. Their focus is primarily on big data, where they implement a novel version of SMOTE for Apache Spark. Their own resampling technique focuses on instance-level information. This paper also covers the different types of minorities, as were covered in Krawczyk 2016 \cite{Saez:2016}. They have the most complete list of quality measures for evaluation, nine in total. \emph{Could be useful for the quality measure selection}
+ 
+\subsubsection*{Santos et al. 2022 5/5} \emph{On the joint-effect of class imbalance and overlap: a critical review} \cite{santos2022joint} this paper is super heavy, and it seems to be the best recent overview of the joint effect of class imbalance and overlap. They cite a plethora of papers. In the Section 6 \emph{A taxonomy of class overlap measures} They cite Lorena et al. \emph{How Complex Is Your Classification Problem?: {A} Survey on Measuring Classification Complexity} \cite{DBLP:journals/csur/LorenaGLSH19} for introducing a multi-class version of the IR measure. In their Figure 4. They cover how complex it is to measure class overlap, cause different measures works well for different types of overlap. \emph{The class overlap considerations are imperative, if we are discussing this point in the paper, and the method.}. They however do not introduce a measure, which conveys the information about class overlap, and class imbalance complexity. In section 3.1 they dive into local data characteristics, and point out, that a class can be a local minority. In terms of class imbalance measures this is important to note, because it is something a high level measure as IR definitely does not account for and something we are trying to account for with the silhouette coefficient, but does it actually do it?. In Section 6 on \emph{A taxonomy of class overlap measures} they have a great point about how none of the measures proposed this far, have found their way into the literature, and are only discussed within their respective papers. They point to the measure \cite{DBLP:conf/ida/MercierSASSS18}. 
+Colin pointed the following two quotes out related to classifier performance correlation with complexity measures: 
+
+\say{As discussed previously, RO was the DIT technique that reduced the data complexity the most regarding the N3 measure. However, RO did not outperform the other DIT techniques in predictive performance… As N1, N3, and wCM11 are based on the nearest neighbors, the duplication of the instances in the minority class affects their values}
+
+\say{Moreover, NB and J48 performances are usually not well correlated with the reduction in data complexity of any of the measures considered compared to the other classification algorithms when the same DIT technique is applied}
+
+\subsubsection*{Lorena et al. 2019}
+Their work results in an R-package called \emph{Extended Complexity Library}(ECoL). In this paper the Imbalance Entropy as defined by yours truly is presented, except it differs in that it is not a normalized measure. The normalization can be done in multiple ways, but the most straight forward way is to use $\log_{|C|}$, so this could be a nice addition to the content of this paper. They also state that this was first done in the \cite{DBLP:journals/ijon/LorenaCSS12}. 
+Cites: Luengo and Herrera 2015. 
+
+\subsubsection*{Mercier et al. 2018 5/5}  
+\cite{DBLP:conf/ida/MercierSASSS18} presents a measure dubbed Degree IR (degIR) this measure measures the complexity as a function of the local imbalance and the overlap. The paper is probably the most related paper to the work we present both in terms of the proposed algorithm but also the structure. The algorithm proposed is closely related to \emph{N1},\emph{N2} and \emph{N3} presented in \cite{DBLP:journals/isci/BarellaGSLC21}. The relation between these measures should be closely explored. 
+Their choice of synthetical datasets intersect the proposed choice for our paper.  A point is considered in an overlapping region, if the one of its 5 nearest neighbors has a different class label than itself. The number of points from the minority class, that are in an overlapping region is defined as $n_{min\_over}$ and the number of points from the minority class, that is in an overlapping region is defined as $n_{maj\_over}$. Then the overlap degree is defined as shown in Equation \ref{eq:overlap degree}
+\begin{equation}
+\label{eq:overlap degree}
+\frac{n_{min\_over} + n_{maj\_over}}{n}
+\end{equation}
+They measure the degree IR after normalization is defined as \ref{eq:degIR}
+\begin{equation}
+\label{eq:degIR}
+1-\frac{n_{min\_over}}{\frac{n}{2}}=1-\frac{2n_{min\_over}}{n}
+\end{equation}
+

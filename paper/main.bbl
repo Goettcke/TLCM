@@ -1,0 +1,66 @@
+\begin{thebibliography}{10}
+
+\bibitem{DBLP:conf/ijcnn/BarellaGSLC18}
+{\sc V.~H. Barella, L.~P.~F. Garcia, M.~C.~P. de~Souto, A.~C. Lorena, and A.~C.
+  P. L.~F. de~Carvalho}, {\em Data complexity measures for imbalanced
+  classification tasks}, in {IJCNN}, {IEEE}, 2018, pp.~1--8.
+
+\bibitem{DBLP:journals/isci/BarellaGSLC21}
+\leavevmode\vrule height 2pt depth -1.6pt width 23pt, {\em Assessing the data
+  complexity of imbalanced datasets}, Inf. Sci., 553 (2021), pp.~83--109.
+
+\bibitem{DBLP:conf/icml/BergstraYC13}
+{\sc J.~Bergstra, D.~Yamins, and D.~D. Cox}, {\em Making a science of model
+  search: Hyperparameter optimization in hundreds of dimensions for vision
+  architectures}, in {ICML} {(1)}, vol.~28 of {JMLR} Workshop and Conference
+  Proceedings, JMLR.org, 2013, pp.~115--123.
+
+\bibitem{DSPipe}
+{\sc J.~M.~N. Goettcke}, {\em {DS-Pipe}}.
+\newblock \textit{Available at
+  \url{https://git.imada.sdu.dk/goettcke/DS_Pipe}}, 2022.
+
+\bibitem{luengo2011addressing}
+{\sc J.~Luengo, A.~Fern{\'a}ndez, S.~Garc{\'\i}a, and F.~Herrera}, {\em
+  Addressing data complexity for imbalanced data sets: analysis of smote-based
+  oversampling and evolutionary undersampling}, Soft Computing, 15 (2011),
+  pp.~1909--1936.
+
+\bibitem{DBLP:conf/ida/MercierSASSS18}
+{\sc M.~Mercier, M.~S. Santos, P.~H. Abreu, C.~Soares, J.~P. Soares, and
+  J.~A.~M. Santos}, {\em Analysing the footprint of classifiers in overlapped
+  and imbalanced contexts}, in {IDA}, vol.~11191 of Lecture Notes in Computer
+  Science, Springer, 2018, pp.~200--212.
+
+\bibitem{DBLP:journals/prl/Ortigosa-Hernandez17}
+{\sc J.~Ortigosa{-}Hern{\'{a}}ndez, I.~Inza, and J.~A. Lozano}, {\em Measuring
+  the class-imbalance extent of multi-class problems}, Pattern Recognit. Lett.,
+  98 (2017), pp.~32--38.
+
+\bibitem{raj2016towards}
+{\sc V.~Raj, S.~Magg, and S.~Wermter}, {\em Towards effective classification of
+  imbalanced data with convolutional neural networks}, in IAPR Workshop on
+  Artificial Neural Networks in Pattern Recognition, Springer, 2016,
+  pp.~150--162.
+
+\bibitem{santos2022joint}
+{\sc M.~S. Santos, P.~H. Abreu, N.~Japkowicz, A.~Fern{\'a}ndez, C.~Soares,
+  S.~Wilk, and J.~Santos}, {\em On the joint-effect of class imbalance and
+  overlap: a critical review}, Artificial Intelligence Review,  (2022),
+  pp.~1--69.
+
+\bibitem{Tomek76}
+{\sc I.~Tomek}, {\em {Two Modifications of CNN}}, {IEEE Transactions on
+  Systems, Man, and Cybernetics}, 7(2) (1976), pp.~679--772.
+
+\bibitem{DBLP:journals/prl/ZhuGX20}
+{\sc R.~Zhu, Y.~Guo, and J.~Xue}, {\em Adjusting the imbalance ratio by the
+  dimensionality of imbalanced data}, Pattern Recognit. Lett., 133 (2020),
+  pp.~217--223.
+
+\bibitem{DBLP:journals/prl/ZhuWMWX18}
+{\sc R.~Zhu, Z.~Wang, Z.~Ma, G.~Wang, and J.~Xue}, {\em {LRID:} {A} new metric
+  of multi-class imbalance degree based on likelihood-ratio test}, Pattern
+  Recognit. Lett., 116 (2018), pp.~36--42.
+
+\end{thebibliography}

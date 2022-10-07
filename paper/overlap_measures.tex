@@ -1,0 +1,72 @@
+\section{Overlap}
+In order to develop our understanding of the combined effect of class imbalance and overlap, we must first discuss different types of class overlap. There are 4 types of overlap, which we will discuss briefly below. A high quality review of these different different types can be found in \cite{santos2022joint}. 
+\begin{enumerate}
+    \item Feature overlap
+    \item Structural overlap
+    \item Instance-level overlap
+    \item Multiresolution overlap 
+\end{enumerate}
+
+\subsection{Feature Overlap}
+\emph{Feature overlap} refers to overlapping features between classes within the dataset. 
+This is clearly related to separability, but in any dimensional case it is possible to create two distributions with no actual overlap, which have complete direct feature overlap. Hence measures of feature overlap should capture more information, than just where each respective feature overlaps between different classes.  %Here I could put, the minmax maxmin product, to show how we define the overlap.
+The most popular measure is likely the \emph{Maximum Fisher's discriminant}(\emph{F1}) defined as in Equation \ref{eq:f1}. Here $f_i$ denotes feature $i$ and $\mu1$  and $\sigma_1$ refer to the mean and variance of class 1. The $F_1$ measure is defined for binary problems.  
+\begin{equation}
+    \label{eq:f1}
+    r_{f_{i}} = \frac{(\mu_1-\mu_2)^2}{\sigma^2_1+\sigma^2_2}
+\end{equation}
+\emph{F2} measures the volume of the overlapping region. \emph{F3} measures the ratio of instances in the overlapping region. Santos et al. \cite{santos2022joint} point out that even though the entire minority class is within the overlapping region, the value of F3 can still be close to one, this is true, yet not for their formulation of \emph{F3} which is represented as a minimization problem, and not a maximization.  
+The measure is defined in Equation \ref{eq:f3}, where $n_o(f_i)$ is the number of points which is not within the overlapping region and $m$ is the number of features.
+\begin{equation}
+    \label{eq:f3}
+    \text{F3}(T)=\arg\max_{i=1}^{m} \frac{n_o(f_i)}{n}
+\end{equation}
+\emph{F4} or Collective Feature Efficiency reports the ratio of points which could not be discriminated using any of the features according to emph{F3}. First it finds the feature with the most discriminative power, and remove all the points that could be discriminated, and then iterates this step until all features are covered.  
+
+\subsection{Structural Overlap}
+\emph{Structural overlap} refers to overlap caused by the intrinsic structure of a given class. The structure can be understood as the way in which the data belonging to a particular class is distributed in the data space. The structure can lead to problematic regions where there is an overlap between two differing classes data space. It is natural that many overlap measures falls within this category, the ones which are a part of our analysis is briefly described here.
+
+\begin{itemize}
+    \item \textbf{N1} is a neighborhood measure that operates on the minimum spanning tree (MST), and finds the number of points incident to points with a different label. It is given as the fraction of these borderline points over the number of points in the dataset. 
+    \item \textbf{N2} reports the ratio of the intra class distances over the inter class distances, which is the sum of distances of all points to their nearest neighbor, over the sum of distances to their nearest differently labeled neighbor. 
+    \item \textbf{T1} returns the ratio of the number of covering hypercubes over the number of points in the dataset. For each point in the dataset a hypersphere centered on the point is stretched until it reaches the nearest point with a different label. Then from smallest to largest hypersphere, the sphere is removed if it is inside another sphere. The ratio between number the number of covering hyperspheres and points in the dataset is returned.  
+    \item \textbf{L1} returns the average distance from each misclassified point of a linear support vector machine to the separating hyperplane.
+    \item \textbf{L2} returns the error rate of a linear support vector machine. 
+    \item \textbf{L3} Measures the non linearity of a linear classifier by creating a synthetic dataset by from interpolating points from each class and then reports the error rate.
+\end{itemize}
+
+\subsection{Instance-level Overlap}
+\emph{Instance level overlap} measures the local instance level complexity instead of viewing the problem from a more global perspective. Here both measures are using the 1NN classifier to obtain this local view. 
+\begin{itemize}
+    \item \textbf{N3} Reports the error rate of a 1NN classifier.
+    \item \textbf{N4} Measures the linearity of the nearest neighbor classifier by creating a new synthetic dataset by interpolating the original dataset, then trains a 1NN classifier on the new dataset, and reports the error rate.
+\end{itemize}
+
+\begin{table}
+    \centering
+    \begin{tabular}{c|c|c}
+    Measure & Interval & Greater $\implies$ Complexity  \\ \hline
+    \text{F1} & $\left(0,1 \right]$ & \text{True} \\
+    \text{F2} & $\left(0,1 \right]$ & \text{True}  \\
+    \text{F3} & $\left(0,1 \right]$ & \text{False} \\
+    \text{F4} & $\left(0,1 \right]$ & \text{True} \\
+    \text{N1} & $\left(0,1 \right]$ & \text{True} \\
+    \text{N2} & $\left(0,1 \right]$ &  \text{True} \\
+    \text{T1} & $\left(\frac{|C|}{n}, 1 \right]$ &  \text{True} \\
+    \text{L1} & $\left(0, \infty \right]$ &  \text{True} \\
+    \text{L2} & $\left(0, 1 \right]$ &  \text{True} \\
+    \text{L3} & $\left(0, 1 \right]$ &  \text{True} \\
+    \end{tabular}
+    \caption{\emph{F1} requires normalization given by \cite{DBLP:journals/csur/LorenaGLSH19} to be in this interval, otherwise it is in $\left]0, \infty \right)$. The interval for \emph{T1} is given where $|C|$ is the number of classes, and $n$ is the number of points in the dataset.}
+\end{table}
+
+\subsection{Multiresolution overlap}
+Multiresolution overlap  measures overlap recursively by looking at different subsets of the data, at different levels of granularity. In this study, we have not examined any multiresolution measures.
+
+
+
+
+
+%TODO in addition to this nice table, it would be nice to have a visualization which illustrates which values we can expect from these measures.
+\subsection{The convex hull and overlap}
+% Here we could add a discussion on how measuring overlap actually works using the convex hull. I see it as a ratio of points within the convex hull, that does not belong to class x. This measure is most likely clearly correlated with F2, however F2 does not take the number of points into account, only the size of the overlap region. This means that if c\_min is heavily outweighed in a small overlap region, because it is the minority class, this would capture it. This can be seen as a kind of global and local measure, since it measures overlap globally in terms of the convex hull of each class, but also takes the size of each class into account. The ratio could be defined as how many points of the opposite class is within my convex hull divided by how many points is in my class.   
