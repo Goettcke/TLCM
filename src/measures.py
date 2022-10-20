@@ -26,46 +26,7 @@ def gower_metric(x,y):
     return g_matrix[0,1]
 
 
-def complexity_adjusted_imbalance_ratio(dataset,k=1.5, r=2, metric="Euclidean") -> float:
-    """
-    """
-    assert len(set(dataset.target)) == 2, "Problem should be dichotomous"
-    counts = Counter(dataset.target).values()
-    ir = max(counts)/min(counts)
-    if metric == "Euclidean": 
-        return ir*math.pow((-(silhouette_score(X=dataset.data, labels=dataset.target)-k)),r)
-    elif metric == "Gower": 
-        dist = gower_matrix(dataset.data)
-        return ir*math.pow((-(silhouette_score(X=dist, labels=dataset.target, metric="precomputed")-k)),r)
-    else: 
-        raise IllegalArgumentError(metric, ["Euclidean", "Gower"])
-
-
-def new_cair(dataset,k=1.5, r=2, metric="Euclidean") -> float:
-    """
-    """
-    assert len(set(dataset.target)) == 2, "Problem should be dichotomous"
-    counts = Counter(dataset.target).values()
-    ir = max(counts)/min(counts)
-    sil_dist = silhouette_samples(dataset.data, dataset.target) 
-    # Then we split the dataset into its different classes
-    label_indices = [np.where(dataset.target == label)[0] for label in set(dataset.target)] 
-    variations = [-(statistics.variance(sil_dist[label_indices[i]])-1) for i in range(len(label_indices))] 
-    means = [np.mean(sil_dist[label_indices[i]]) for i in range(len(label_indices))] 
-    #print(variations)
-    return ir*np.mean(variations)
-
-
 def tlcm(dataset): 
-    tl = TomekLinks()
-    n = len(dataset.target)
-    counts = Counter(dataset.target).values()
-    ir = max(counts)/min(counts)
-    _,y_res = tl.fit_resample(dataset.data, dataset.target)
-    return 1-(len(y_res)/n)
-
-
-def tlcm_2(dataset): 
     """
     The idea is, that we take the proportion of the Tomek links, from the minority class in the dataset.
     """ 
@@ -83,7 +44,7 @@ def tlcm_2(dataset):
                 c_min_tomek_links += 1 
     return c_min_tomek_links/counts[c_min] 
 
-def tlcm_2_mean(dataset): 
+def tlcm_mean(dataset): 
     """
     The idea is, that we take the macro averaged proportion of the Tomek links, from all classes in the dataset.
     """ 
