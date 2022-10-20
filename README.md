@@ -38,6 +38,12 @@ dc = DatasetCollections()
 dataset, dataset_name = dc.load_dataset("glass")
 print(f"TLCM: {tlcm(dataset)},\nIR: {imbalance_ratio(dataset)},\nN1:{n_1_imb_mean(dataset)},\nN3: {n_3_imb_mean(dataset)}")
 ```
+The list of imbalance complexity measures in this package are: 
+- N1 (Barella et al 2021)
+- N3 (Barella et al 2021)
+- TLCM (Goettcke et al 2022)
+- degIR (Mercier et al 2019)
+- degOver (Mercier et al 2019)
 
 
 ##  People 

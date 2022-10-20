@@ -44,28 +44,6 @@ def tlcm(dataset):
                 c_min_tomek_links += 1 
     return c_min_tomek_links/counts[c_min] 
 
-def tlcm_mean(dataset): 
-    """
-    The idea is, that we take the macro averaged proportion of the Tomek links, from all classes in the dataset.
-    """ 
-    counts = Counter(dataset.target)
-    tls = []
-    
-    nbrs = NearestNeighbors(n_neighbors=2).fit(dataset.data)
-    distances, nbr_indices = nbrs.kneighbors(dataset.data)
-    
-    for label in counts.keys(): 
-        indices = [index for index, yi in enumerate(dataset.target) if yi == label]
-        tomek_link_count = 0
-        for index in indices: 
-            nn_index = nbr_indices[index][1] # index 0 is the point it self
-            if dataset.target[nn_index] != label: 
-                if nn_index == nbr_indices[nn_index][0]: 
-                    # Then they are mutual nearest neighbors of different classes i.e. Tomek Links
-                    tomek_link_count += 1 
-        tls.append(tomek_link_count/counts[label])
-        return np.mean(tls) 
-
 
 #TODO Gower distance is not implemented here yet.
 def n_3(dataset, metric="Euclidean"): 
@@ -113,8 +91,6 @@ def n_3_imb_mean(dataset, metric="Euclidean"):
 
 
 #This implementation  could perhaps be optimized with building a kNN graph instead of the complete graph, which takes forever.
-
-
 def n_1_imb(dataset, metric="Euclidean",label="min"):
     """
     # Keyword arguments: 
@@ -198,6 +174,12 @@ def degIR(dataset):
     c_maj = key_with_max_val(counts)
     return 1-(counts[c_min]/(n/2))
 
-
+def lrid(self):
+    c = len(np.unique(self.dataset.target))
+    size = len(self.dataset.target)
+    proba = [count/size for count in self.counter.values()]
+    summation = np.sum([(p*np.log(p*c)) for p in proba])
+    LLI = 2 * summation
+    return LLI 
 
 
