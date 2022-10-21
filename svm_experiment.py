@@ -64,9 +64,8 @@ def unoptimized_experiment(datasets, write_result=False):
         
 
 
-if __name__=="__main__": 
-    #datasets = load_synthetic_datasets() + load_real_datasets()
-    datasets = load_synthetic_datasets()[-2:]
+if __name__=="__main__":
+    datasets = load_synthetic_datasets() + load_real_datasets()
     optimized_experiment(datasets,write_result_flag=True)
     #unoptimized_experiment()
 
