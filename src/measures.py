@@ -65,7 +65,7 @@ def n_3_imb(dataset, metric="Euclidean", label="min"):
     #start_time = time() 
     from sklearn.neighbors import KDTree
     counts = Counter(dataset.target)
-    if label == "min":  
+    if label == "min":
         label = key_with_min_val(counts)
 
     if metric.lower() ==  "gower": 
@@ -108,15 +108,15 @@ def n_1_imb(dataset, metric="Euclidean",label="min"):
     nx.set_node_attributes(G,{i: dataset.target[i] for i in range(len(dataset.target))}, name="label")
     
     # Build the complete graph
-    if metric.lower() == "euclidean": 
-        for i in range(G.number_of_nodes()): 
+    if metric.lower() == "euclidean":
+        for i in range(G.number_of_nodes()):
             for j in range(i,G.number_of_nodes()): 
                 G.add_edge(i,j,weight = np.linalg.norm(dataset.data[i]-dataset.data[j]))
     
-    elif metric.lower() == "gower": 
-        g_matrix = gower_matrix(dataset.data)   
-        for i in range(G.number_of_nodes()): 
-            for j in range(i,G.number_of_nodes()): 
+    elif metric.lower() == "gower":
+        g_matrix = gower_matrix(dataset.data)
+        for i in range(G.number_of_nodes()):
+            for j in range(i,G.number_of_nodes()):
                 G.add_edge(i,j,weight = g_matrix[i,j])
 
     # Compute the minimum spanning tree
@@ -128,7 +128,7 @@ def n_1_imb(dataset, metric="Euclidean",label="min"):
         if dataset.target[node] == label: 
             for edge in T.edges(node):
                 if dataset.target[edge[0]] != dataset.target[edge[1]]: 
-                    no_differently_labeled += 1 
+                    no_differently_labeled += 1
                     break
 
     return no_differently_labeled/counter[label]
