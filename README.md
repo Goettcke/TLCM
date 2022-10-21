@@ -39,11 +39,18 @@ dataset, dataset_name = dc.load_dataset("glass")
 print(f"TLCM: {tlcm(dataset)},\nIR: {imbalance_ratio(dataset)},\nN1:{n_1_imb_mean(dataset)},\nN3: {n_3_imb_mean(dataset)}")
 ```
 The list of imbalance complexity measures in this package are: 
-- N1 (Barella et al 2021)
-- N3 (Barella et al 2021)
-- TLCM (Goettcke et al 2022)
-- degIR (Mercier et al 2019)
-- degOver (Mercier et al 2019)
+- N1 (Barella et al. 2021)
+- N3 (Barella et al. 2021)
+- TLCM (Goettcke et al. 2022)
+- degIR (Mercier et al. 2019)
+- degOver (Mercier et al. 2019)
+- LRID (Zhu et al. 2018) 
+- IR
+
+More imbalance complexity measures can be found in the DS\_Pipe package under `from ds_pipe.datasets.dataset_metadata import measure`
+
+## Experimental setup 
+The experiments are split up into several files. Many of the operations which are done in preparation for the experimental pipeline are in the jupyter notebook `binary_experiment.ipynb`. Here you find code to generate the synthetic datasets, loading the results into dataframes, which are used for the experimental analysis, building the plots, computing correlation and much more.  
 
 
 ##  People 
